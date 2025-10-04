@@ -30,6 +30,7 @@ Thumbs.db
 *.sbr
 *.opensdf
 *.blend1
+*.png
 *.xcf
 *.vs
 x64/
