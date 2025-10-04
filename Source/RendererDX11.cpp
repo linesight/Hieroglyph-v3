@@ -1309,9 +1309,9 @@ ResourcePtr RendererDX11::LoadTexture( std::wstring filename, bool sRGB )
 			D3D11_BIND_SHADER_RESOURCE,
 			0,
 			0,
-			sRGB,
+			sRGB ? DirectX::WIC_LOADER_FORCE_SRGB : DirectX::WIC_LOADER_DEFAULT,
 			pResource.GetAddressOf(),
-			0 );
+			nullptr );
 	}
 
 
