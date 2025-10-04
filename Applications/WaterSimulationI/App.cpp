@@ -106,7 +106,7 @@ void App::Initialize()
 
 	Vector4f FinalColor = Vector4f( 0.5f, 1.0f, 0.5f, 1.0f );
 	m_pFinalColor = m_pRenderer11->m_pParamMgr->GetVectorParameterRef( std::wstring( L"FinalColor" ) );
-	m_pFinalColor->InitializeParameterData( &m_pFinalColor );
+	m_pFinalColor->InitializeParameterData( &FinalColor );
 
 	// The camera is already created, we just need to specify where it is.  We also set
 	// the back color of the render view.
