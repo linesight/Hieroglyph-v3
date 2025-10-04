@@ -57,6 +57,9 @@ namespace Glyph3
 		UnorderedAccessParameterDX11* m_pNewWaterState;
 		VectorParameterDX11* m_pDispatchSize;
 
+		ResourcePtr m_pTimeParametersCB;
+		RenderParameterDX11* m_pTimeParameters;
+
 	};
 };
 //--------------------------------------------------------------------------------

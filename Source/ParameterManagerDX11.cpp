@@ -353,10 +353,21 @@ void ParameterManagerDX11::SetMatrixArrayParameter( RenderParameterDX11* pParame
 //--------------------------------------------------------------------------------
 void ParameterManagerDX11::SetShaderResourceParameter( RenderParameterDX11* pParameter, ResourcePtr resource )
 {
-	if ( pParameter->GetParameterType() == SHADER_RESOURCE )
-		pParameter->SetParameterData( reinterpret_cast<void*>( &resource->m_iResourceSRV ), GetID() );
-	else
-		Log::Get().Write( L"Shader resource view parameter name collision!" );
+	if (pParameter->GetParameterType() == SHADER_RESOURCE) {
+		// Add validation
+		if (resource->m_iResourceSRV < 0) {
+			Log::Get().Write(L"ERROR: SetShaderResourceParameter called with invalid SRV index: " +
+				std::to_wstring(resource->m_iResourceSRV));
+			return;
+		}
+		
+		Log::Get().Write(L"SetShaderResourceParameter: Setting parameter '" + pParameter->GetName() +
+				L"' to SRV index: " + std::to_wstring(resource->m_iResourceSRV));
+		pParameter->SetParameterData(reinterpret_cast<void*>(&resource->m_iResourceSRV), GetID());
+	}
+	else {
+		Log::Get().Write(L"Shader resource view parameter name collision!");
+	}
 }
 //--------------------------------------------------------------------------------
 void ParameterManagerDX11::SetUnorderedAccessParameter( RenderParameterDX11* pParameter, ResourcePtr resource, unsigned int initial )
