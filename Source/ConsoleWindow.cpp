@@ -25,7 +25,7 @@ volatile HWND ConsoleWindow::m_hEditControl = NULL;
 //char ConsoleWindow::m_CommandBuffer[4096];
 wchar_t ConsoleWindow::m_CommandBufferW[4096];
 
-WNDPROC lpfnInputEdit;  // Storage for subclassed edit control 
+WNDPROC lpfnInputEdit = nullptr;  // Storage for subclassed edit control 
 //--------------------------------------------------------------------------------
 HWND ConsoleWindow::StartConsole( HINSTANCE hInstance, ScriptManager* pScriptContext )
 {
@@ -319,7 +319,7 @@ LRESULT CALLBACK ConsoleWindow::SubclassInputEditProc( HWND hWnd, UINT message, 
 			SendMessage( m_hWnd, WM_USER, 0, lSizeofString );
 
 			// clear the edit string
-			SendMessage( hWnd, WM_SETTEXT, 0, (long) "" ); 
+			SendMessage( hWnd, WM_SETTEXT, 0, (LPARAM)L"");
 			return 1;
 		}
 	}
@@ -382,7 +382,7 @@ void ConsoleWindow::Init( HINSTANCE hInstance )
     SetFocus( m_hEditControl );
 	m_ScrollyPos = 0;
 
-	lpfnInputEdit = (WNDPROC)SetWindowLongPtr( m_hEditControl, GWLP_WNDPROC, (long) SubclassInputEditProc ); 
+	lpfnInputEdit = (WNDPROC)SetWindowLongPtr( m_hEditControl, GWLP_WNDPROC, (LONG_PTR) SubclassInputEditProc ); 
 	g_Console->ResizeControls();
 
 
