@@ -31,6 +31,7 @@ Thumbs.db
 *.opensdf
 *.blend1
 *.png
+!Applications/Data/Textures/*.png
 *.xcf
 *.vs
 x64/
