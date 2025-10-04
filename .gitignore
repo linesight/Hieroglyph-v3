@@ -1,4 +1,5 @@
 packages/
+Library/
 *.tmp
 #Ignore Visual studio files
 *.sdf
@@ -30,3 +31,7 @@ Thumbs.db
 *.opensdf
 *.blend1
 *.xcf
+*.vs
+x64/
+Win32/
+Bin/
