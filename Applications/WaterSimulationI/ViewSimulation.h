@@ -44,12 +44,13 @@ namespace Glyph3
 		virtual void SetUsageParams( IParameterManager* pParamManager );
 
 		virtual std::wstring GetName();
-		
 
 	protected:
 		int ThreadGroupsX;
 		int ThreadGroupsY;
 
+		int m_CurrentReadIndex = 0;
+		int m_CurrentWriteIndex = 1;
 		ResourcePtr WaterState[2];
 		RenderEffectDX11*	pWaterEffect;
 

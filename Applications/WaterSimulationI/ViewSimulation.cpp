@@ -107,28 +107,23 @@ void ViewSimulation::QueuePreTasks( RendererDX11* pRenderer )
 //--------------------------------------------------------------------------------
 void ViewSimulation::ExecuteTask( PipelineManagerDX11* pPipelineManager, IParameterManager* pParamManager )
 {
-	// Set this view's render parameters.
-	SetRenderParams( pParamManager );
+	// Use indices to determine which resource to read from and write to
+	pParamManager->SetShaderResourceParameter( m_pCurrentWaterState, WaterState[m_CurrentReadIndex] );
+	pParamManager->SetUnorderedAccessParameter( m_pNewWaterState, WaterState[m_CurrentWriteIndex] );
 
-	// Perform the dispatch call to update the simulation state.
+	// Perform the dispatch call
 	pPipelineManager->Dispatch( *pWaterEffect, ThreadGroupsX, ThreadGroupsY, 1, pParamManager );
 	pPipelineManager->ClearPipelineResources();
 	pPipelineManager->ApplyPipelineResources();
 
-	// Switch the two resources so that the current state is maintained in slot 0.
-	ResourcePtr TempState = WaterState[0];
-	WaterState[0] = WaterState[1];
-	WaterState[1] = TempState;
+	// Swap indices for next frame
+	std::swap(m_CurrentReadIndex, m_CurrentWriteIndex);
 }
 //--------------------------------------------------------------------------------
 void ViewSimulation::SetRenderParams( IParameterManager* pParamManager )
 {
-	// Set the parameters for this view to be able to perform its processing
-	// sequence.  In this case, water state '0' is always considered the current
-	// state.
-
-	pParamManager->SetShaderResourceParameter( m_pCurrentWaterState, WaterState[0] );
-	pParamManager->SetUnorderedAccessParameter( m_pNewWaterState, WaterState[1] );
+	pParamManager->SetShaderResourceParameter( m_pCurrentWaterState, WaterState[m_CurrentReadIndex] );
+	pParamManager->SetUnorderedAccessParameter( m_pNewWaterState, WaterState[m_CurrentWriteIndex] );
 }
 //--------------------------------------------------------------------------------
 void ViewSimulation::SetUsageParams( IParameterManager* pParamManager )
@@ -138,7 +133,7 @@ void ViewSimulation::SetUsageParams( IParameterManager* pParamManager )
 
 	Vector4f DispatchSize = Vector4f( 16.0f, 16.0f, 16.0f * 16.0f, 16.0f * 16.0f );
 
-	pParamManager->SetShaderResourceParameter( m_pCurrentWaterState, WaterState[0] );
+	pParamManager->SetShaderResourceParameter( m_pCurrentWaterState, WaterState[m_CurrentReadIndex] );
 	pParamManager->SetVectorParameter( m_pDispatchSize, &DispatchSize );
 }
 //--------------------------------------------------------------------------------
